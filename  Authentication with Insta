@@ -1,0 +1,27 @@
+import requests
+
+ACCESS_TOKEN = "<your_valid_access_token>"
+USER_ID = "me"  # Change to your Facebook user ID if needed
+GRAPH_API_URL = f"https://graph.facebook.com/v19.0/{USER_ID}?fields=id,name,email&access_token={ACCESS_TOKEN}"
+
+def get_user_profile():
+    response = requests.get(GRAPH_API_URL)
+
+    print("🔹 Response Status Code:", response.status_code)
+    print("🔹 Raw Response Text:", response.text)  # Print raw response before parsing JSON
+
+    if response.status_code == 200:
+        try:
+            return response.json()
+        except requests.exceptions.JSONDecodeError:
+            print(" Failed to parse JSON. Response might be empty or incorrect.")
+    else:
+        print(f" HTTP Error {response.status_code}: {response.text}")
+
+    return None
+
+profile = get_user_profile()
+if profile:
+    print("User Profile:", profile)
+else:
+    print(" No valid data received.")
